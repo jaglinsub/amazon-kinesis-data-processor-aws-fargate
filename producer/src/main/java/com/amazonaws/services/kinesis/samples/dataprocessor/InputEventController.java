@@ -61,8 +61,16 @@ public class InputEventController {
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
         try {
-            Map<String, Object> jsonObject = mapper.readValue((String) payload.get("data"), Map.class);
-            System.out.println("jsonObject=" + jsonObject);
+            String element = mapper.writeValueAsString(payload.get("data"));
+            System.out.println("Object to String=" + element);
+
+            String key = UUID.randomUUID().toString();
+            ByteBuffer data = ByteBuffer.wrap(element.getBytes("UTF-8"));
+            kinesis.addUserRecord(streamName, key, data);
+            System.out.println("Finished adding user record");
+
+//            Map<String, Object> jsonObject = mapper.readValue((String) payload.get("data"), Map.class);
+//            System.out.println("jsonObject=" + jsonObject);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
