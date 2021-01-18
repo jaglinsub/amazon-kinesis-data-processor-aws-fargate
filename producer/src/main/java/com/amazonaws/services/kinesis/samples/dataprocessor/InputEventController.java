@@ -62,7 +62,7 @@ public class InputEventController {
 
         try {
             Map<String, Object> jsonObject = mapper.readValue((String) payload.get("data"), Map.class);
-            System.out.println(jsonObject);
+            System.out.println("jsonObject=" + jsonObject);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
