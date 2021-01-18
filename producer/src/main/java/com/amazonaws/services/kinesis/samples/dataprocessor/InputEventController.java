@@ -33,9 +33,10 @@ public class InputEventController {
         //Returns HTTP Status 200 
     }
 
-    //Handler for post requests
+    //Handler for post requests with String
     @PostMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
     public void processInputEvent(@RequestBody Map<String, Object> payload) throws UnsupportedEncodingException {
+        System.out.println("Data=" + payload.toString());
         String element = (String) payload.get("data");
         String key = UUID.randomUUID().toString();
         ByteBuffer data = ByteBuffer.wrap(element.getBytes("UTF-8"));
@@ -44,6 +45,21 @@ public class InputEventController {
         * You can implement a synchronous or asynchronous response to results
         * https://docs.aws.amazon.com/streams/latest/dev/kinesis-kpl-writing.html 
         */
+
+        return;
+    }
+
+    //Handler for post requests with JSON
+    @PostMapping(value = "/obj", produces = MediaType.APPLICATION_JSON_VALUE)
+    public void processInputJSONEvent(@RequestBody Map<String, Object> payload) throws UnsupportedEncodingException {
+        String element = (String) payload.get("data");
+        String key = UUID.randomUUID().toString();
+        ByteBuffer data = ByteBuffer.wrap(element.getBytes("UTF-8"));
+        kinesis.addUserRecord(streamName, key, data);
+        /*
+         * You can implement a synchronous or asynchronous response to results
+         * https://docs.aws.amazon.com/streams/latest/dev/kinesis-kpl-writing.html
+         */
 
         return;
     }
