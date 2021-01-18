@@ -5,6 +5,7 @@
 
 package com.amazonaws.services.kinesis.samples.dataprocessor;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.web.bind.annotation.*;
@@ -55,10 +56,16 @@ public class InputEventController {
     @PostMapping(value = "/obj", produces = MediaType.APPLICATION_JSON_VALUE)
     public void processInputJSONEvent(@RequestBody Map<String, Object> payload) throws UnsupportedEncodingException {
         System.out.println("Data=" + payload);
-        //JSONObject jsonObj = new JSONObject(inputData);
-//        ObjectMapper mapper = new ObjectMapper();
-//        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-//        JSONObject jsonObject = mapper.readValue(json, JSONObject.class);
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+        try {
+            Map<String, Object> jsonObject = mapper.readValue((String) payload.get("data"), Map.class);
+            System.out.println(jsonObject);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
 //
 //        String element = (String) payload.get("data");
 //        String key = UUID.randomUUID().toString();
